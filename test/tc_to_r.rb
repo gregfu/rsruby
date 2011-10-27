@@ -87,23 +87,23 @@ class TestToR < Test::Unit::TestCase
   end
 
   def test_hash_to_named_vector
-    @r.c.autoconvert(RSRuby::NO_CONVERSION)    
+    @r.c.autoconvert(RSRuby::NO_CONVERSION)
     assert_equal(@r.typeof(@r.c(:foo => 5, :bar => 7)),'integer')
-    
+
     assert(@r.attributes(@r.c(:foo => 5, :bar => 7))['names'].include?('foo'))
     assert(@r.attributes(@r.c(:foo => 5, :bar => 7))['names'].include?('bar'))
     #TODO - these fail because of the different calling semantics in
     #RSRuby
-    #@r.c.autoconvert(RSRuby::BASIC_CONVERSION)    
+    #@r.c.autoconvert(RSRuby::BASIC_CONVERSION)
     #assert_equal(@r.typeof(@r.c(:foo => 5, :bar => 7)),'integer')
     #assert(@r.attributes(@r.c(:foo => 5, :bar => 7))['names'].include?('foo'))
-    #assert(@r.attributes(@r.c(:foo => 5, :bar => 7))['names'].include?('bar'))      
+    #assert(@r.attributes(@r.c(:foo => 5, :bar => 7))['names'].include?('bar'))
   end
 
   def test_array_to_vector
-    @r.c.autoconvert(RSRuby::NO_CONVERSION)    
+    @r.c.autoconvert(RSRuby::NO_CONVERSION)
     assert_equal(@r.length(@r.c(1,2,3,4)),4)
-    @r.c.autoconvert(RSRuby::BASIC_CONVERSION)    
+    @r.c.autoconvert(RSRuby::BASIC_CONVERSION)
     assert_equal(@r.length(@r.c(1,2,3,4)),4)
   end
 

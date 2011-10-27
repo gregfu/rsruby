@@ -6,7 +6,7 @@
 #unlike the R datatypes.
 #
 #To better replicate the R behaviour, this code uses the arrayfields library
-#(available as a gem) and the RSRuby Proc conversion mode to create named 
+#(available as a gem) and the RSRuby Proc conversion mode to create named
 #Arrays which preserve order.
 #
 #NB: You can run this file like a normal Ruby script. I use some post-
@@ -22,7 +22,7 @@
 #
 #The next Proc takes the R object and generates a new Array with fields
 #set appropriately:
-#  
+#
 #  conv_proc = lambda{|x|
 #    hash  = x.to_ruby
 #    array = []
@@ -37,7 +37,7 @@
 #  r = RSRuby.instance
 #  r.t_test.autoconvert(RSRuby::PROC_CONVERSION)
 #  r.proc_table[test_proc] = conv_proc
-#  
+#
 #The return values from t.test are now Arrays rather than Hashes:
 #
 #  ttest = r.t_test([1,2,3])

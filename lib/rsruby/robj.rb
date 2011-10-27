@@ -1,9 +1,9 @@
 #== Synopsis
 #
-#This class represents a reference to an object in the R interpreter. It 
+#This class represents a reference to an object in the R interpreter. It
 #also holds a conversion mode used if the RObj represents a callable function.
-#RObj objects can be passed to R functions called from Ruby and are the 
-#default return type if RSRuby cannot convert the returned results of an R 
+#RObj objects can be passed to R functions called from Ruby and are the
+#default return type if RSRuby cannot convert the returned results of an R
 #function.
 #
 #--
@@ -59,7 +59,7 @@ class RObj
       raise ArgumentError if m < -1 or m > RSRuby::TOP_CONVERSION
       @conversion = m
     end
-    @conversion      
+    @conversion
   end
 
 end

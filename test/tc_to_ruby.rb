@@ -3,7 +3,7 @@ require 'rsruby'
 
 class TestToRuby < Test::Unit::TestCase
   @@test_dir = File.expand_path File.dirname(__FILE__) 
-  
+
   def setup
     @r = RSRuby.instance
     RSRuby.set_default_mode(RSRuby::NO_DEFAULT)
@@ -49,8 +49,8 @@ class TestToRuby < Test::Unit::TestCase
 
   def test_NA_list
 
-    #TODO - RPy has commented out these tests as well. 
-    #The conversion between NA/NaN and Ruby seems a little confused 
+    #TODO - RPy has commented out these tests as well.
+    #The conversion between NA/NaN and Ruby seems a little confused
     #at the moment
 
     xi = [1,2,@r.NA,@r.NaN,4]
@@ -65,21 +65,21 @@ class TestToRuby < Test::Unit::TestCase
     #assert_equal(@r.as_numeric(xi)  , [1.01,2.01,@r.NA,@r.NaN,4.01])
     assert_equal(@r.as_integer(xd)  , [1,2,@r.NA,@r.NA,4])
     assert_equal(@r.factor(xd)      , ['1.01','2.02','NA','NaN','4.04'])
-    assert_equal(@r.is_na(xd)       , [false, false, true, true, false])    
+    assert_equal(@r.is_na(xd)       , [false, false, true, true, false])
   end
 
   #TODO - table.txt?????????
   def test_dataframe_to_list
     @r.read_table.autoconvert(RSRuby::BASIC_CONVERSION)
-    assert_equal(@r.read_table(@@test_dir+"/table.txt", {:header => 1}), 
+    assert_equal(@r.read_table(@@test_dir+"/table.txt", {:header => 1}),
       {
-        'A' => ['X1','X2','X3'], 
-        'C' => [5,8,2], 
+        'A' => ['X1','X2','X3'],
+        'C' => [5,8,2],
         'B' => [4.0,7.0,6.0],
         'D' => ['6','9','Foo']
       })
   end
-  
+
   def test_logical_to_boolean
     assert_equal(@r.TRUE,  true)
     assert_equal(@r.T,     true)
@@ -147,7 +147,7 @@ class TestToRuby < Test::Unit::TestCase
     assert_equal(@r.typeof(@r.c(1,2,3)), 'integer')
     assert_equal(@r.typeof(@r.c(1,2.0,3)), 'double')
     assert_equal(@r.typeof(@r.c(1,Complex(2,3),3)), 'complex')
-    assert_equal(@r.typeof(@r.c(1,'foo',3)), 'character')    
+    assert_equal(@r.typeof(@r.c(1,'foo',3)), 'character')
   end
 
 end

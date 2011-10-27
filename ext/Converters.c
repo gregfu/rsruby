@@ -46,14 +46,14 @@ SEXP ruby_to_R(VALUE obj)
     return R_NilValue;
   }
 
-  //If object has 'as_r' then call it and use 
+  //If object has 'as_r' then call it and use
   //returned value subsequently
   if (rb_respond_to(obj, rb_intern("as_r"))){
     obj = rb_funcall(obj,rb_intern("as_r"),0);
     if (!obj)
       return NULL;
   }
-  
+
   if (Robj_Check(obj))
     {
       Data_Get_Struct(obj, struct SEXPREC, robj);
@@ -67,9 +67,9 @@ SEXP ruby_to_R(VALUE obj)
       } else {
 	LOGICAL_DATA(robj)[0] = FALSE;
       }
-	  
+
     }
-  else if (TYPE(obj) == T_FIXNUM || 
+  else if (TYPE(obj) == T_FIXNUM ||
 	   TYPE(obj) == T_BIGNUM)
     {
       PROTECT(robj = NEW_INTEGER(1));
@@ -80,26 +80,26 @@ SEXP ruby_to_R(VALUE obj)
       PROTECT(robj = NEW_NUMERIC(1));
       NUMERIC_DATA(robj)[0] = NUM2DBL(obj);
     }
-  else if (RubyComplex_Check(obj)) 
+  else if (RubyComplex_Check(obj))
     {
       PROTECT(robj = NEW_COMPLEX(1));
       COMPLEX_DATA(robj)[0].r = NUM2DBL(rb_funcall(obj,rb_intern("real"),0));
       COMPLEX_DATA(robj)[0].i = NUM2DBL(rb_funcall(obj,rb_intern("image"),0));
     }
-  else if (!NIL_P(rb_check_string_type(obj))) 
+  else if (!NIL_P(rb_check_string_type(obj)))
     {
       PROTECT(robj = NEW_STRING(1));
       SET_STRING_ELT(robj, 0, COPY_TO_USER_STRING(RSTRING_PTR(obj)));
     }
-  else if (!NIL_P(rb_check_array_type(obj))) 
+  else if (!NIL_P(rb_check_array_type(obj)))
     {
       PROTECT(robj = array_to_R(obj));
     }
-  else if (TYPE(obj) == T_HASH) 
+  else if (TYPE(obj) == T_HASH)
     {
       PROTECT(robj = hash_to_R(obj));
     }
-  else 
+  else
     {
       str = rb_funcall(obj,rb_intern("inspect"),0);
       str = rb_funcall(str,rb_intern("slice"),2,INT2NUM(0),INT2NUM(60));
@@ -121,7 +121,7 @@ SEXP array_to_R(VALUE obj)
 
   /* This matrix defines what mode a vector should take given what
      it already contains and a new item
-  
+
      E.g. Row 0 indicates that if we've seen an any, the vector will
      always remain an any.  Row 3 indicates that if we've seen a
      float, then seeing an boolean, integer, or float will preserve
@@ -137,7 +137,7 @@ SEXP array_to_R(VALUE obj)
     {0, 0, 0, 0, 0, 5, 0}, // string
     {0, 0, 0, 0, 0, 0, 6}  // RObj
   };
-  
+
   //Probably unnessecary but just in case
   obj = rb_check_array_type(obj);
 
@@ -158,7 +158,7 @@ SEXP array_to_R(VALUE obj)
 
     if (!(rit = ruby_to_R(it)))
       goto exception;
-    
+
     SET_VECTOR_ELT(robj, i, rit);
   }
 
@@ -207,7 +207,7 @@ hash_to_R(VALUE obj)
     return NULL;
   if (!(values = rb_funcall(obj,rb_intern("values"),0)))
     return NULL;
-  
+
   if (!(robj  = array_to_R(values)))
     goto fail;
   if (!(names = array_to_R(keys)))
@@ -228,7 +228,7 @@ type_to_int(VALUE obj)
 {
   if (obj == Qtrue || obj == Qfalse)
     return BOOL_T;
-  else if (TYPE(obj) == T_FIXNUM || 
+  else if (TYPE(obj) == T_FIXNUM ||
 	   TYPE(obj) == T_BIGNUM)
     return INT_T;
   else if (TYPE(obj) == T_FLOAT)
@@ -271,7 +271,7 @@ VALUE to_ruby_with_mode(SEXP robj, int mode)
       if (i<0) return Qnil;
       if (i==1) break;
     default:
-      obj = Data_Wrap_Struct(rb_const_get(rb_cObject, 
+      obj = Data_Wrap_Struct(rb_const_get(rb_cObject,
 					  rb_intern("RObj")), 0, 0, robj);
       rb_iv_set(obj,"@conversion",INT2FIX(TOP_MODE));
       rb_iv_set(obj,"@wrap",Qfalse);
@@ -325,7 +325,7 @@ to_ruby_vector(SEXP robj, VALUE *obj, int mode)
   len = GET_LENGTH(robj);
   tmp = rb_ary_new2(len);
   type = TYPEOF(robj);
-  
+
   for (i=0; i<len; i++) {
     switch (type)
       {
@@ -438,11 +438,11 @@ from_proc_table(SEXP robj, VALUE *fun)
   funs  = rb_funcall(proc_table,rb_intern("values"),0);
   l     = FIX2INT(rb_funcall(proc_table,rb_intern("size"),0));
 
-  obj = Data_Wrap_Struct(rb_const_get(rb_cObject, 
+  obj = Data_Wrap_Struct(rb_const_get(rb_cObject,
 				      rb_intern("RObj")), 0, 0, robj);
   rb_iv_set(obj,"@conversion",INT2FIX(TOP_MODE));
   rb_iv_set(obj,"@wrap",Qfalse);
-  
+
   error = 0;
   for (i=0; i<l; i++) {
     proc = rb_ary_entry(procs, i);
@@ -475,7 +475,7 @@ VALUE reset_mode(VALUE mode){
 
   rb_iv_set(RSRUBY,
 	    "@default_mode",
-	    mode); 
+	    mode);
 
   return Qnil;
 
@@ -501,7 +501,7 @@ to_ruby_proc(SEXP robj, VALUE *obj)
 
   //Create new object based on robj and call the function
   //found above with it as argument
-  tmp = Data_Wrap_Struct(rb_const_get(rb_cObject, 
+  tmp = Data_Wrap_Struct(rb_const_get(rb_cObject,
 				      rb_intern("RObj")), 0, 0, robj);
   rb_iv_set(tmp,"@conversion",INT2FIX(TOP_MODE));
   rb_iv_set(tmp,"@wrap",Qfalse);
@@ -563,13 +563,13 @@ to_ruby_class(SEXP robj, VALUE *obj)
   VALUE args[2];
 
   fun = from_class_table(robj);
-  
+
   if (fun==Qnil)
     return 0;                   /* conversion failed */
-  
-  tmp = Data_Wrap_Struct(rb_const_get(rb_cObject, 
+
+  tmp = Data_Wrap_Struct(rb_const_get(rb_cObject,
 				      rb_intern("RObj")), 0, 0, robj);
-  rb_iv_set(tmp,"@conversion",INT2FIX(TOP_MODE));  
+  rb_iv_set(tmp,"@conversion",INT2FIX(TOP_MODE));
   rb_iv_set(tmp,"@wrap",Qfalse);
 
   //Again set conversion mode to basic to prevent recursion
@@ -601,7 +601,7 @@ VALUE to_ruby_hash(VALUE obj, SEXP names)
     name = CHAR(STRING_ELT(names, i));
     rb_hash_aset(hash, rb_str_new2(name), it);
   }
-  
+
   return hash;
 }
 
@@ -620,7 +620,7 @@ VALUE ltranspose(VALUE list, int *dims, int *strides,
     for (i=0; i<dims[pos]; i++) {
       if (!(it = rb_ary_entry(list, i*strides[pos]+shift)))
         return Qnil;
-      rb_ary_store(nl, i, it);     
+      rb_ary_store(nl, i, it);
     }
     return nl;
   }
@@ -634,7 +634,7 @@ VALUE ltranspose(VALUE list, int *dims, int *strides,
 
   return nl;
 }
-      
+
 /* Convert a R Array to a Ruby Array (in the form of
  * array of arrays of ...) */
 VALUE to_ruby_array(VALUE obj, int *dims, int l)
