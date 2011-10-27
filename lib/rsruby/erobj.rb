@@ -9,7 +9,7 @@ require 'rsruby'
 #
 #== Usage
 #
-#See examples/erobj.rb[link:files/examples/erobj_rb.html] for examples of 
+#See examples/erobj.rb[link:files/examples/erobj_rb.html] for examples of
 #usage.
 #
 #--
@@ -92,7 +92,7 @@ class ERObj
 
   end
 
-  #Methods caught by method_missing are converted into attribute calls on 
+  #Methods caught by method_missing are converted into attribute calls on
   #the R object it represents.
   def method_missing(attr)
     mode = RSRuby.get_default_mode

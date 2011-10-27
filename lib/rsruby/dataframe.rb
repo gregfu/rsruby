@@ -4,14 +4,14 @@ require 'rsruby/erobj'
 #== Synopsis
 #
 #This is an extended ERObj class inspired by the example given in the RPy
-#manual used for R data frames. 
-#As with ERObj, methods caught by method_missing are converted into attribute 
+#manual used for R data frames.
+#As with ERObj, methods caught by method_missing are converted into attribute
 #calls on the R dataframe it represents. The rows and columns methods give
 #access to the column and row names.
 #
 #== Usage
 #
-#See examples/dataframe.rb[link:files/examples/dataframe_rb.html] for 
+#See examples/dataframe.rb[link:files/examples/dataframe_rb.html] for
 #examples of usage.
 #
 #--
@@ -74,10 +74,10 @@ class DataFrame < ERObj
   def[]=(row,col,val)
     #How to set a value in this dataframe?
     @r.assign("rsrubytemp",@robj)
-    
+
     ### VERY HACKY - This relies on val having the same
     #string representation in R and Ruby. An assign based
-    #solution with proper conversion of val would be much 
+    #solution with proper conversion of val would be much
     #better
     @r.eval_R("rsrubytemp[#{row+1},#{col+1}] <- #{val}")
     #

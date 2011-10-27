@@ -52,12 +52,12 @@ RecursiveRelease(SEXP obj, SEXP list)
   Robj_dealloc(VALUE self)
   {
   SEXP robj;
-  
+
   Data_Get_Struct(self, struct SEXPREC, robj);
-  
+
   R_References = RecursiveRelease(robj, R_References);
   SET_SYMVALUE(install("R.References"), R_References);
-  
+
   return;
   }*/
 
@@ -83,7 +83,7 @@ VALUE get_fun(VALUE self, VALUE name){
     return Qnil;
 
   /* Wrap the returned R object as a ruby Object */
-  rubyobj = Data_Wrap_Struct(rb_const_get(rb_cObject, 
+  rubyobj = Data_Wrap_Struct(rb_const_get(rb_cObject,
 					  rb_intern("RObj")), 0, 0, robj);
   rb_iv_set(rubyobj,"@conversion",INT2FIX(conversion));
   rb_iv_set(rubyobj,"@wrap",Qfalse);
@@ -97,17 +97,17 @@ void r_finalize(void)
 {
   unsigned char buf[1024];
   char * tmpdir;
-  
-  R_dot_Last();           
-  R_RunExitFinalizers();  
-  CleanEd();              
-  Rf_KillAllDevices();       
 
-  if((tmpdir = getenv("R_SESSION_TMPDIR"))) {          
-    snprintf((char *)buf, 1024, "rm -rf %s", tmpdir); 
-    R_system((char *)buf);                            
+  R_dot_Last();
+  R_RunExitFinalizers();
+  CleanEd();
+  Rf_KillAllDevices();
+
+  if((tmpdir = getenv("R_SESSION_TMPDIR"))) {
+    snprintf((char *)buf, 1024, "rm -rf %s", tmpdir);
+    R_system((char *)buf);
   }
-  
+
   PrintWarnings();	/* from device close and .Last */
   R_gc();  /* Remove any remaining R objects from memory */
 }
@@ -149,12 +149,12 @@ void init_R(int argc, char **argv){
   Rf_initEmbeddedR(sizeof(defaultArgv) / sizeof(defaultArgv[0]), defaultArgv);
   R_Interactive = FALSE; //Remove crash menu (and other interactive R features)
 }
-             
+
 /* This method is for testing catching of segfaults */
 VALUE crash(){
   int* ptr = (int*)0;
   *ptr = 1;
-  return Qtrue; 
+  return Qtrue;
 }
 
 
@@ -176,7 +176,7 @@ void Init_rsruby_c(){
   //Add the lcall method to RObj
   cRObj  = rb_const_get(rb_cObject,rb_intern("RObj"));
   rb_define_method(cRObj, "lcall", RObj_lcall, 1);
-  rb_define_method(cRObj, "__init_lcall__", RObj_init_lcall, 1);  
+  rb_define_method(cRObj, "__init_lcall__", RObj_init_lcall, 1);
   rb_define_method(cRObj, "to_ruby", RObj_to_ruby, -2);
 
 }

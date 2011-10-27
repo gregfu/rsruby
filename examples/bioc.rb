@@ -18,7 +18,7 @@
 #
 #  r.library('affy')
 #
-#  r.eval_R("mydata <- ReadAffy()") 
+#  r.eval_R("mydata <- ReadAffy()")
 #  r.eval_R("eset.rma <- rma(mydata)")
 #  r.eval_R("eset.pma <- mas5calls(mydata)")
 #

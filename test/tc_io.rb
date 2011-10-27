@@ -41,14 +41,14 @@ class TestIO < Test::Unit::TestCase
     @r.help()
     assert out == ['foo']
   end
-     
+
   def test_io_stdout_exception
     #TODO - I can't understand this test in Rpy
   end
 
   def test_io_stdin_exception
     #TODO - I can't understand this test in Rpy
-  end  
+  end
 
   def test_io_stderr_exception
     #TODO - I can't understand this test in Rpy

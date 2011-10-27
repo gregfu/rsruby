@@ -36,7 +36,7 @@ class TestModes < Test::Unit::TestCase
 
     RSRuby.set_default_mode(RSRuby::BASIC_CONVERSION)
     assert_equal(sequence.to_ruby, [1,2,3])
-    
+
     RSRuby.set_default_mode(RSRuby::VECTOR_CONVERSION)
     assert_equal(sequence.to_ruby, [1,2,3])
 
@@ -75,7 +75,7 @@ class TestModes < Test::Unit::TestCase
     @r.seq.autoconvert(RSRuby::BASIC_CONVERSION)
 
     assert_equal(@r.array(1,3).class, @r.array.class)
-    
+
     assert_equal(@r.seq(1,3), [1,2,3])
     @r.class_table['htest'] = lambda{|x| 5}
     assert_equal(@r.t_test([1,2,3]), 5)
@@ -98,7 +98,7 @@ class TestModes < Test::Unit::TestCase
     assert_equal(@r.c(4), 4)
     assert_equal(@r.seq(1,3), [1,2,3])
     assert_equal(@r.min(1,3), [1])
-    
+
     RSRuby.set_default_mode(RSRuby::BASIC_CONVERSION)
     assert_equal(@r.c.autoconvert, RSRuby::BASIC_CONVERSION)
     assert_equal(@r.seq.autoconvert, RSRuby::PROC_CONVERSION)
@@ -118,7 +118,7 @@ class TestModes < Test::Unit::TestCase
   end
 
   def test_vector_conversion
-    
+
     RSRuby.set_default_mode(RSRuby::VECTOR_CONVERSION)
 
     assert_equal(@r.c(true), [true])
@@ -127,7 +127,7 @@ class TestModes < Test::Unit::TestCase
 
     assert_equal(@r.c(1,'A',2), ['1','A','2'])
     assert_equal(@r.c(:a => 1, :b => 'A', :c => 2), {'a' => '1', 'b' => 'A', 'c' => '2'})
-    assert_equal(@r.list(:a => 1, :b => 'A', :c => 2), 
+    assert_equal(@r.list(:a => 1, :b => 'A', :c => 2),
       {'a' => [1], 'b' => ['A'], 'c' => [2]})
     assert_equal(@r.eval_R("x~y").class, RObj)
   end
@@ -141,16 +141,16 @@ class TestModes < Test::Unit::TestCase
 
     assert_equal(@r.c(1,'A',2), ['1','A','2'])
     assert_equal(@r.c(:a => 1, :b => 'A', :c => 2), {'a' => '1', 'b' => 'A', 'c' => '2'})
-    assert_equal(@r.list(:a => 1, :b => 'A', :c => 2), 
+    assert_equal(@r.list(:a => 1, :b => 'A', :c => 2),
       {'a' => 1, 'b' => 'A', 'c' => 2})
     assert_equal(@r.eval_R("x~y").class, RObj)
-    
+
   end
 
   def test_class_table
 
     @r.class_table['htest'] = lambda{|x| 'htest'}
-    @r.class_table['data.frame'] = lambda{|x| 
+    @r.class_table['data.frame'] = lambda{|x|
       if @r['[['].call(x,1).length > 2
         return 5
       else
@@ -180,10 +180,10 @@ class TestModes < Test::Unit::TestCase
 
     @r.class_table.delete(['bar','foo'])
     assert_equal(g.to_ruby, 'bar')
-    
+
     @r.class_table.delete('bar')
     assert_equal(g.to_ruby, 'foo')
-    
+
   end
 
   def test_proc_table
@@ -216,7 +216,7 @@ class TestModes < Test::Unit::TestCase
       return "Cannot return 'foo'" if x == 'foo'
       return x
     }
-    
+
     r.proc_table[check_str] = f
 
     RSRuby.set_default_mode(RSRuby::PROC_CONVERSION)
@@ -230,12 +230,12 @@ class TestModes < Test::Unit::TestCase
   def test_restore_mode_after_exception_in_proc
 
     r = RSRuby.instance
-    
+
     check_str = lambda{|x| RSRuby.instance.is_character(x)}
     f = lambda{|x|
       x.reverse
     }
-    
+
     r.proc_table[check_str] = f
 
     RSRuby.set_default_mode(RSRuby::PROC_CONVERSION)

@@ -15,6 +15,6 @@ class TestLibrary < Test::Unit::TestCase
   def test_library_fail
     #Test failure
     assert_raises(RException){@r.library("Missing")}
-  end  
+  end
 
 end

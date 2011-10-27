@@ -10,12 +10,12 @@ class TestBoolean < Test::Unit::TestCase
   end
 
   def test_true
-    assert_block "r.TRUE not working" do 
-      (@r.typeof(@r.FALSE) == 'logical' and 
+    assert_block "r.TRUE not working" do
+      (@r.typeof(@r.FALSE) == 'logical' and
        @r.as_logical(@r.TRUE))
     end
   end
-  
+
   def test_false
     assert_block "r.FALSE not working" do
       (@r.typeof(@r.FALSE) == 'logical' and not
